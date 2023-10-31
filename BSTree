@@ -1,4 +1,7 @@
-void addUtil(Node* root, T value) {
+Exercise 1:
+//Helping functions
+
+    void addUtil(Node* root, T value) {
         if (value < root->value) {
             if (root->pLeft == nullptr) {
                 root->pLeft = new Node(value);
@@ -60,3 +63,165 @@ void addUtil(Node* root, T value) {
     void deleteNode(T value) {
         root = deleteUtil(root, value);
     }
+Exercise 2:
+vector<int> levelAlterTraverse(BSTNode* root) {
+    vector<int> result;
+    if (root == NULL) return result;
+
+    queue<BSTNode*> q;
+    q.push(root);
+    bool leftToRight = true;
+
+    while (!q.empty()) {
+        int size = q.size();
+        vector<int> currentLevel;
+
+        for (int i = 0; i < size; i++) {
+            BSTNode* current = q.front();
+            q.pop();
+            currentLevel.push_back(current->val);
+
+            if (current->left != NULL) q.push(current->left);
+            if (current->right != NULL) q.push(current->right);
+        }
+
+        if (!leftToRight) reverse(currentLevel.begin(), currentLevel.end());
+        for (int val : currentLevel) result.push_back(val);
+
+        leftToRight = !leftToRight;
+    }
+    return result;
+}
+Exercise 3:
+
+int kthSmallest(BSTNode* root, int k) {
+    vector <int> v;
+    queue <BSTNode*> q;
+    BSTNode* current;
+    q.push(root);
+    while (!(q.empty())){
+        current = q.front();
+        v.push_back(current -> val);
+        if (current->left != NULL) q.push(current->left);
+        if (current->right != NULL) q.push(current->right);
+        q.pop();
+    }
+    sort(v.begin(),v.end());
+    return v[k-1];
+}
+Exercise 4:
+int rangeCount(BTNode* root, int lo, int hi) {
+    vector<int>v;
+    queue <BTNode*> s;
+    BTNode* current;
+    s.push(root);
+    while (!(s.empty())){
+        current = s.front();
+        v.push_back(current->val);
+        if (current -> right != NULL) s.push(current -> right);
+        if (current -> left != NULL) s.push(current -> left);
+        s.pop();
+    }
+    int result = 0;
+    for (unsigned int i = 0; i < v.size(); i++){
+        if (v[i] >= lo && v[i] <= hi){
+            result++;
+        }   
+    }
+    return result;
+}
+Exercise 5:
+int singleChild(BSTNode* root) {
+        if (root == NULL) return 0;
+
+    int result = 0;
+
+    if ((root->left == NULL && root->right != NULL) || (root->left != NULL && root->right == NULL)) {
+        result++;
+    }
+
+    result += singleChild(root->left);
+    result += singleChild(root->right);
+
+    return result;
+}
+Exercise 6:
+BSTNode* deleteNode(BSTNode* root, int lo, int hi) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    root->left = deleteNode(root->left, lo, hi);
+    root->right = deleteNode(root->right, lo, hi);
+
+    if (root->val < lo) {
+        BSTNode* right = root->right;
+        delete root;
+        return right;
+    }
+    if (root->val > hi) {
+        BSTNode* left = root->left;
+        delete root;
+        return left;
+    }
+
+    return root;
+}
+
+BSTNode* subtreeWithRange(BSTNode* root, int lo, int hi) {
+    return deleteNode(root, lo, hi);
+}
+Exercise 7:
+
+    T sumUtil(Node* root, T l, T r) {
+        if (root == nullptr) {
+            return 0;
+        }
+        if (root->value < l) {
+            return sumUtil(root->pRight, l, r);
+        }
+        if (root->value > r) {
+            return sumUtil(root->pLeft, l, r);
+        }
+        return root->value + sumUtil(root->pLeft, l, r) + sumUtil(root->pRight, l, r);
+    }
+
+bool find(T i) {
+        Node* current = root;
+        while (current != nullptr) {
+            if (i == current->value) {
+                return true;
+            } else if (i < current->value) {
+                current = current->pLeft;
+            } else {
+                current = current->pRight;
+            }
+        }
+        return false;
+    }
+
+    T sum(T l, T r) {
+        return sumUtil(root, l, r);
+    }
+
+
+// STUDENT ANSWER END
+Exercise 8:
+// STUDENT ANSWER BEGIN
+// You can define other functions here to help you.
+
+T getMin() {
+    //TODO: return the minimum values of nodes in the tree.
+    Node* result = root;
+    while (result->pLeft != NULL) result = result ->pLeft;
+    return result ->value;
+}
+
+T getMax() {
+    //TODO: return the maximum values of nodes in the tree.
+    Node* result = root;
+    while (result->pRight != NULL) result = result ->pRight;
+    return result ->value;
+}
+
+// STUDENT ANSWER END
