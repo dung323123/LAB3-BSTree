@@ -1,0 +1,62 @@
+void addUtil(Node* root, T value) {
+        if (value < root->value) {
+            if (root->pLeft == nullptr) {
+                root->pLeft = new Node(value);
+            } else {
+                addUtil(root->pLeft, value);
+            }
+        } else {
+            if (root->pRight == nullptr) {
+                root->pRight = new Node(value);
+            } else {
+                addUtil(root->pRight, value);
+            }
+        }
+    }
+
+    void add(T value) {
+        if (root == nullptr) {
+            root = new Node(value);
+        } else {
+            addUtil(root, value);
+        }
+    }
+
+    Node* findMinNode(Node* node) {
+        Node* current = node;
+        while (current && current->pLeft != nullptr) {
+            current = current->pLeft;
+        }
+        return current;
+    }
+
+    Node* deleteUtil(Node* root, T value) {
+        if (root == nullptr) {
+            return root;
+        }
+
+        if (value < root->value) {
+            root->pLeft = deleteUtil(root->pLeft, value);
+        } else if (value > root->value) {
+            root->pRight = deleteUtil(root->pRight, value);
+        } else {
+            if (root->pLeft == nullptr) {
+                Node* temp = root->pRight;
+                delete root;
+                return temp;
+            } else if (root->pRight == nullptr) {
+                Node* temp = root->pLeft;
+                delete root;
+                return temp;
+            }
+
+            Node* temp = findMinNode(root->pRight);
+            root->value = temp->value;
+            root->pRight = deleteUtil(root->pRight, temp->value);
+        }
+        return root;
+    }
+
+    void deleteNode(T value) {
+        root = deleteUtil(root, value);
+    }
